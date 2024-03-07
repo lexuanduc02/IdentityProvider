@@ -1,4 +1,3 @@
-using Duende.IdentityServer.AspNetIdentity;
 using IdentityProvider;
 using IP.Domain;
 using Microsoft.AspNetCore.Identity;
@@ -50,24 +49,7 @@ builder.Services.AddRouting(options =>
     options.LowercaseUrls = true;
 });
 
-#region IdentityServer
-
-var migrationsAssembly = typeof(Program).Assembly.GetName().Name;
-services.AddIdentityServer()
-       .AddConfigurationStore(options =>
-       {
-           options.ConfigureDbContext = b => b.UseNpgsql(connectionString,
-               sql => sql.MigrationsAssembly(migrationsAssembly));
-       })
-       .AddOperationalStore(options =>
-       {
-           options.ConfigureDbContext = b => b.UseNpgsql(connectionString,
-               sql => sql.MigrationsAssembly(migrationsAssembly));
-       })
-       .AddDeveloperSigningCredential()
-       .AddAspNetIdentity<User>();
-
-#endregion
+IdentityServerRegister.Initialize(services, connectionString);
 
 var app = builder.Build();
 
