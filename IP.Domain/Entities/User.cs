@@ -19,4 +19,5 @@ public class User : IdentityUser<Guid>
     public int Gender { get; set; }
 
     public DateTime Dob { get; set; }
+    public string? ImageLink { get; set; }
 }
