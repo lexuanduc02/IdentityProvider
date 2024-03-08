@@ -30,26 +30,30 @@ services
     .AddServiceCollection()
     .AddAutoMapper(typeof(Program));
 
-services.AddDbContext<IdentityProviderContext>(options =>
-{
-    options.UseNpgsql(connectionString);
-});
+services
+    .AddDbContext<IdentityProviderContext>(options =>
+    {
+        options.UseNpgsql(connectionString);
+    });
 
-services.AddIdentity<User, Role>(options =>
-        {
-            options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            options.Lockout.MaxFailedAccessAttempts = 5;
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
-        })
-        .AddEntityFrameworkStores<IdentityProviderContext>()
-        .AddDefaultTokenProviders();
+services
+    .AddIdentity<User, Role>(options =>
+    {
+        options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        options.Lockout.MaxFailedAccessAttempts = 5;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    })
+    .AddEntityFrameworkStores<IdentityProviderContext>()
+    .AddDefaultTokenProviders();
 
-builder.Services.AddRouting(options =>
-{
-    options.LowercaseUrls = true;
-});
+services
+    .AddRouting(options =>
+    {
+        options.LowercaseUrls = true;
+    });
 
-IdentityServerRegister.Initialize(services, connectionString);
+// Seeding data for IdentityServer database on first run
+// IdentityServerRegister.Initialize(services, connectionString);
 
 var app = builder.Build();
 
@@ -60,6 +64,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+MigrationManager.InitializeDatabase(app);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

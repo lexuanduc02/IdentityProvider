@@ -7,7 +7,7 @@ public class IdentityServerRegister
 {
     public static void Initialize(IServiceCollection services, string connectionString)
     {
-        var migrationsAssembly = "IP.Domain";
+        var migrationsAssembly = typeof(IdentityProviderContext).Assembly.GetName().Name;
         services.AddIdentityServer()
                .AddConfigurationStore(options =>
                {
