@@ -21,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entites\" />
-    <Folder Include="Extentions\" />
+    <Folder Include="Entities\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ public class IdentityProviderContext : IdentityDbContext<User, Role, Guid>
 {
     public IdentityProviderContext(DbContextOptions<IdentityProviderContext> options) : base(options)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -45,6 +47,8 @@ public class IdentityProviderContext : IdentityDbContext<User, Role, Guid>
         });
 
         builder.Entity<RoleClient>().HasKey(x => new { x.RoleId, x.ClientId });
+
+        builder.Seed();
     }
 
     public DbSet<User> Users { get; set; }

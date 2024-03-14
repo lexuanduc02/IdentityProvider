@@ -20,6 +20,8 @@ if (string.IsNullOrWhiteSpace(connectionString))
     return;
 }
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 SerilogRegister.Initialize(configuration);
 
 // Add services to the container.
@@ -52,8 +54,7 @@ services
         options.LowercaseUrls = true;
     });
 
-// Seeding data for IdentityServer database on first run
-// IdentityServerRegister.Initialize(services, connectionString);
+IdentityServerRegister.Initialize(services, connectionString);
 
 var app = builder.Build();
 
@@ -65,7 +66,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-MigrationManager.InitializeDatabase(app);
+// Seeding data for IdentityServer database on first run
+// MigrationManager.InitializeDatabase(app);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -76,6 +78,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=oauth}/{action=login}");
 
 app.Run();
