@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IP.Model;
+using Microsoft.AspNetCore.Identity;
 
 namespace IP.Domain;
 
@@ -16,7 +17,7 @@ public class User : IdentityUser<Guid>
 
     public string? AvatarLink { get; set; }
 
-    public int Gender { get; set; }
+    public GenderEnum Gender { get; set; }
 
     public DateTime Dob { get; set; }
     public string? ImageLink { get; set; }
