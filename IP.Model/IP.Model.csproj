@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CommonModels\" />
     <Folder Include="Options\" />
   </ItemGroup>
 
