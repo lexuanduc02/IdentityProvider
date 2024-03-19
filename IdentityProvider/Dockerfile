@@ -1,27 +1,27 @@
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-ENV ASPNETCORE_ENVIRONMENT=Development
-
 USER app
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG configuration=Release
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["IP.Model/IP.Model/.csproj", "IP.Model/"]
-COPY ["IP.Common/IP.Common.csproj", "IP.Common/"]
-COPY ["IP.Domain/IP.Domain.csproj", "IP.Domain/"]
-COPY ["IP.Services/IP.Services.csproj", "IP.Services/"]
 COPY ["IdentityProvider/IdentityProvider.csproj", "IdentityProvider/"]
-RUN dotnet restore "IdentityProvider/IdentityProvider.csproj"
+COPY ["IP.Services/IP.Services.csproj", "IP.Services/"]
+COPY ["IP.Domain/IP.Domain.csproj", "IP.Domain/"]
+COPY ["IP.Common/IP.Common.csproj", "IP.Common/"]
+COPY ["IP.Model/IP.Model.csproj", "IP.Model/"]
+RUN dotnet restore "./IdentityProvider/./IdentityProvider.csproj"
 COPY . .
 WORKDIR "/src/IdentityProvider"
-RUN dotnet build "IdentityProvider.csproj" -c $configuration -o /app/build
+RUN dotnet build "./IdentityProvider.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-ARG configuration=Release
-RUN dotnet publish "IdentityProvider.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./IdentityProvider.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
