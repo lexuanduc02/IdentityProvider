@@ -26,17 +26,9 @@ pipeline {
                     if (imageExists == 0) {
                         echo "Image $image does not exist."
                     } else {
-                        stage('Remove Image - ${image}') {
-                            echo "Remove Image"
+                        echo "Remove Image"
                             sh "docker image rm $image"
                             echo "Remove Image Done"
-                        }
-
-                        stage('Remove Image None - ${image}') {
-                            echo "Remove Image None"
-                            sh "docker image prune -f"
-                            echo "Remove Image None Done"
-                        }
                     }
                 }
             }
