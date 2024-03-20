@@ -63,28 +63,6 @@ pipeline {
             }
         }
 
-        stage('Clean') {
-            steps {
-                //clean the workspace after deployment ignoring node_modules directory
-                cleanWs(patterns: [[pattern: 'node_modules', type: 'EXCLUDE']])
-                deleteDir()
-                try {
-                    echo "Clean success"
-                    dir("${env.WORKSPACE}@tmp") {
-                        deleteDir()
-                    }
-                    dir("${env.WORKSPACE}@script") {
-                        deleteDir()
-                    }
-                    dir("${env.WORKSPACE}@script@tmp") {
-                        deleteDir()
-                    }
-                } catch(Exception e) {
-                    echo "Clean error"
-                }
-            }
-        }
-
         stage('Write for Build') {
             steps {
                 script {
