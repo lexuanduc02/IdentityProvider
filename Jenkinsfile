@@ -28,13 +28,13 @@ pipeline {
                     } else {
                         stage('Remove Image - ${image}') {
                             echo "Remove Image"
-                            sh "sudo docker image rm $image"
+                            sh "docker image rm $image"
                             echo "Remove Image Done"
                         }
 
                         stage('Remove Image None - ${image}') {
                             echo "Remove Image None"
-                            sh "sudo docker image prune -f"
+                            sh "docker image prune -f"
                             echo "Remove Image None Done"
                         }
                     }
